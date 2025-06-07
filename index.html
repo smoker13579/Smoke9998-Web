@@ -32,11 +32,96 @@
   </style>
 </head>
 
-<body id="top" oncontextmenu="return false" onclick="play();">
-  <audio autoplay id="audio">
-    <source src="https://cdn.discordapp.com/attachments/765919453766352916/794473375035818004/sound.mp3"
-      type="audio/mpeg">
-  </audio>
+<!-- الصوت -->
+<audio id="audio" loop>
+  <source src="assets/SMOKE.DEV.mp3" type="audio/mpeg">
+</audio>
+
+<!-- رسالة تفعيل الصوت -->
+<div id="audioPrompt" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  text-align: center;
+  z-index: 10000;
+  cursor: pointer;
+">
+  🎧 اضغط في أي مكان لتفعيل الصوت
+</div>
+
+<!-- زر التحكم بالصوت -->
+<div id="audioToggle" onclick="toggleAudio()" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  background-color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: background 0.3s;
+">
+  <i id="audioIcon" class="fas fa-volume-up" style="color: #888; font-size: 20px;"></i>
+</div>
+
+<script>
+  const audio = document.getElementById('audio');
+  const prompt = document.getElementById('audioPrompt');
+  const icon = document.getElementById('audioIcon');
+
+  // دالة لتفعيل الصوت تدريجيًا
+  function fadeInAudio() {
+    audio.volume = 0;
+    audio.play();
+    let vol = 0;
+    const fade = setInterval(() => {
+      if (vol < 1) {
+        vol += 0.05;
+        audio.volume = Math.min(vol, 1);
+      } else {
+        clearInterval(fade);
+      }
+    }, 100);
+  }
+
+  // دالة لتبديل تشغيل/إيقاف الصوت
+  function toggleAudio() {
+    if (audio.paused) {
+      audio.play();
+      icon.classList.remove('fa-volume-mute');
+      icon.classList.add('fa-volume-up');
+    } else {
+      audio.pause();
+      icon.classList.remove('fa-volume-up');
+      icon.classList.add('fa-volume-mute');
+    }
+  }
+
+  // تفعيل الصوت عند أول تفاعل من المستخدم
+  window.addEventListener('click', () => {
+    if (audio.paused) {
+      fadeInAudio();
+      prompt.style.display = 'none';
+    }
+  }, { once: true });
+</script>
+
+<!-- مكتبة Font Awesome للأيقونات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <section id="hero" class="s-home target-section">
     <div class="shadow-overlay" id="wave"></div>
@@ -71,7 +156,7 @@
                 </div>
 
                 <div class="buttons">
-                  <!-- <a href="https://discord.com/users/745732703424348169" target="_blank">Discord</a> -->
+                  
                 </div>
               </div>
             </div>
@@ -80,24 +165,7 @@
       </div>
     </div>
   </section>
-  <!--       <footer id="footer">
 
-        <div class="container d-md-flex py-4">
-      
-          <div class="me-md-auto text-center text-md-start">
-            <div class="copyright">
-              &copy; Copyright. All Rights Reserved
-            </div>
-            <div class="credits">
-              Developed by <a href="https://github.com/Alpha1005" target="_blank">Alpha_1005</a>
-            </div>
-          </div>
-          <div class="social-links text-center text-md-end pt-3 pt-md-0">
-            <a href="https://twitter.com/Alpha1005_" class="twitter" target="_blank"><i class="bx bxl-twitter"></i></a>
-            <a href="https://github.com/Alpha1005" class="discord" target="_blank"><i class="bx bxl-discord"></i></a>
-          </div>
-        </div>
-      </footer> -->
 
   <script src="assets/vanilla_tilt.js" charset="utf-8"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
@@ -131,4 +199,105 @@
   </script>
 </body>
 
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>منع النسخ</title>
+<style>
+  /* منع تحديد النص */
+  body {
+    -webkit-user-select: none; /* Chrome, Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+ */
+    user-select: none;         /* Standard */
+  }
+</style>
+</head>
+<body>
+
+<h1>مثال لمنع النسخ</h1>
+<p>لا يمكنك تحديد أو نسخ هذا النص.</p>
+<img src="your-image.jpg" alt="صورة" />
+
+<script>
+  // منع النقر بزر الماوس الأيمن
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  // منع نسخ النص عبر اختصارات الكيبورد (Ctrl+C, Ctrl+X, Ctrl+U, Ctrl+S)
+  document.addEventListener('keydown', function(event) {
+    if (
+      (event.ctrlKey && (event.key === 'c' || event.key === 'x' || event.key === 'u' || event.key === 's')) ||
+      (event.key === 'PrintScreen')
+    ) {
+      event.preventDefault();
+      alert('النسخ ممنوع على هذا الموقع.');
+    }
+  });
+
+  // منع السحب (Drag) للصور أو العناصر
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
+<!-- تحميل التوكنات -->
+<script>
+window.tokens = [];
+
+fetch('js/tokens.txt')
+  .then(response => response.text())
+  .then(text => {
+    const rawTokens = text.split('\n').filter(Boolean);
+    window.tokens = rawTokens.map(line => {
+      const parts = line.trim().split('-');
+      return parts.length > 1 ? parts.slice(1).join('-').trim() : null;
+    }).filter(Boolean);
+  })
+  .catch(err => {
+    console.error("⚠️ فشل تحميل ملف tokens.txt:", err);
+  });
+</script>
+
+
+<div id="visitor-counter" style="
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background-color: #ffffffcc;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  z-index: 9999;
+">
+  👁️ <span id="visitor-count" style="margin-left: 5px;">...</span>
+</div>
+
+
+<script>
+  // تسجيل الزيارة
+  fetch("https://smoke-web.vercel.app/api/visit", {
+    method: "POST",
+  });
+
+  // عرض عدد الزوار
+  fetch("https://smoke-web.vercel.app/api/count")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("visitor-count").textContent = data.count;
+    })
+    .catch(() => {
+      document.getElementById("visitor-count").textContent = "خطأ";
+    });
+</script>
+
+
+<!-- واجهة المستخدم -->
+<script src="js/index.js"></script>
+
+</body>
 </html>
